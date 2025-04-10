@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacle: {fileID: 3356189230198703879, guid: 3bb2f55456ecf4d879c7f299b04d2b97, type: 3}
-  spawnRate: 4
+  spawnRate: 6
   heightOffset: 10
 --- !u!4 &378547723
 Transform:
