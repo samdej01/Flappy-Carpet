@@ -4,24 +4,42 @@ using UnityEngine;
 
 public class ObstaclesMoveScript : MonoBehaviour
 {
-    public float moveSpeed = 5;
-    public float deadZone = -80;
+    [HideInInspector] public float moveSpeed = 5f;
+    public float deadZone = -80f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private static bool hasLogged = false;
+
+    void Awake()
     {
-        
+        switch (GameModeManager.SelectedMode)
+        {
+            case GameMode.Easy:
+                moveSpeed = 5f;
+                break;
+
+            case GameMode.Hard:
+                moveSpeed = 9f;
+                break;
+
+            case GameMode.Mission:
+                moveSpeed = 7f;
+                break;
+        }
+
+        if (!hasLogged)
+        {
+            //Debug.Log("Obstacle Move Settings → moveSpeed: " + moveSpeed);
+            hasLogged = true;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-      transform.position = transform.position + (Vector3.left * moveSpeed) * Time.deltaTime;
-      
-      if (transform.position.x < deadZone)
+        transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+
+        if (transform.position.x < deadZone)
         {
-          Debug.Log("Obstacle Deleted");
-          Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }

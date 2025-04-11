@@ -6,40 +6,37 @@ public class ObstacleSpawnScript : MonoBehaviour
 {
     public GameObject obstacle;
 
-    [HideInInspector] public float spawnRate = 2f;
+    [HideInInspector] public float spawnRate = 6f;
     [HideInInspector] public float heightOffset = 10f;
 
     private float timer = 0;
 
-    // Use Awake so it runs before Start and before Unity overrides Inspector values
     void Awake()
-    
     {
         switch (GameModeManager.SelectedMode)
         {
             case GameMode.Easy:
                 spawnRate = 6f;
-                heightOffset = 10f;
+                heightOffset = 8f; 
                 break;
 
             case GameMode.Hard:
-                spawnRate = 4f;   // Faster spawns
-                heightOffset = 8f;  // Narrow gap
+                spawnRate = 2f;
+                heightOffset = 10f;  
                 break;
 
             case GameMode.Mission:
-                spawnRate = 5f;
+                spawnRate = 4f;
                 heightOffset = 9f;
                 break;
         }
 
-        Debug.Log("Obstacle Spawn Settings → Mode: " + GameModeManager.SelectedMode +
-                  ", spawnRate: " + spawnRate + ", heightOffset: " + heightOffset);
+        //Debug.Log("Obstacle Spawn Settings → spawnRate: " + spawnRate + ", heightOffset: " + heightOffset);
     }
 
     void Start()
     {
-        spawnObstacle(); // Spawn one immediately
+        spawnObstacle();
     }
 
     void Update()
