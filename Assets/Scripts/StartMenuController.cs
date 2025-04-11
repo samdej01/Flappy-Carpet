@@ -33,7 +33,7 @@ public class StartMenuController : MonoBehaviour
 
     public void OnPlayClicked()
     {
-        // If mode not chosen, default to Easy
+        // If no mode selected, default to Easy
         if (!GameModeManager.ModeChosen)
         {
             GameModeManager.SelectedMode = GameMode.Easy;

@@ -9,6 +9,11 @@ public class LogicScript : MonoBehaviour
     public int playerScore;
     public Text scoreText;
     public GameObject gameOverScreen;
+
+    void Start()
+    {
+        Debug.Log("Game Started in Mode: " + GameModeManager.SelectedMode);
+    }
  
     [ContextMenu("Increase Score")]
     public void addScore(int scoreToAdd)
@@ -16,10 +21,10 @@ public class LogicScript : MonoBehaviour
         playerScore = playerScore + scoreToAdd;
         scoreText.text = playerScore.ToString();
     }
- 
-    public void restartGame()
+
+    public void GoToMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("StartMenuScene");
     }
  
     public void gameOver()
