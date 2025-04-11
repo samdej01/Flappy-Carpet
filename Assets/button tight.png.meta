@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e9007480b6707428a9106586999d8a8a
+guid: 907fb74cca86c42a780f0f240426e5f5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6667615609783089061
-    second: IMG_7911_0
+      213: 5745770306438400450
+    second: button tight_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IMG_7911_0
+      name: button tight_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 389
-        height: 521
+        width: 841
+        height: 390
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5a778ff0211288c50800000000000000
-      internalID: 6667615609783089061
+      spriteID: 2c98f3cb6a31dbf40800000000000000
+      internalID: 5745770306438400450
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      IMG_7911_0: 6667615609783089061
+      button tight_0: 5745770306438400450
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
