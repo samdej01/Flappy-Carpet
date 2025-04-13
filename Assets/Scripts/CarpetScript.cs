@@ -5,26 +5,64 @@ using UnityEngine;
 public class CarpetScript : MonoBehaviour
 {
     public Rigidbody2D myRigidbody;
-    public float flapStrength;
+    public float flapStrength = 15f;
     public LogicScript logic;
     public bool Alive = true;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public AudioSource backgroundMusic;
+    public AudioSource audioSource;
+    public AudioClip collisionClip;
+    public AudioClip gameOverClip;
+
+    private bool hasCollided = false;
+
     void Start()
     {
+        if (myRigidbody == null)
+        {
+            myRigidbody = GetComponent<Rigidbody2D>();
+        }
+
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) == true && Alive == true)
-
-        myRigidbody.linearVelocity = Vector2.up * flapStrength;  
+        if (Alive && Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("SPACE PRESSED");
+            myRigidbody.linearVelocity = Vector2.up * flapStrength;
+        }
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        logic.gameOver();
+        if (hasCollided) return;
+        hasCollided = true;
         Alive = false;
+
+        backgroundMusic.Stop();
+        audioSource.PlayOneShot(collisionClip);
+        StartCoroutine(PlayGameOverAfterDelay());
+    }
+
+    IEnumerator PlayGameOverAfterDelay()
+    {
+        yield return new WaitForSeconds(collisionClip.length);
+        audioSource.PlayOneShot(gameOverClip);
+        yield return new WaitForSeconds(gameOverClip.length * 0.8f);
+        logic.gameOver();
+    }
+
+    public void ForceGameOver()
+    {
+        if (!hasCollided)
+        {
+            hasCollided = true;
+            Alive = false;
+            backgroundMusic.Stop();
+            audioSource.PlayOneShot(collisionClip);
+            StartCoroutine(PlayGameOverAfterDelay());
+        }
     }
 }

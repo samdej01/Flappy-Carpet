@@ -10,6 +10,8 @@ public class LogicScript : MonoBehaviour
     public Text scoreText;
     public GameObject gameOverScreen;
     public GameObject winScreen;
+    public int winScoreThreshold = 10;
+
 
     private float missionTimer = 0f;
     private bool hasWon = false;
@@ -18,6 +20,11 @@ public class LogicScript : MonoBehaviour
     {
         Debug.Log("Game Started in Mode: " + GameModeManager.SelectedMode);
         Time.timeScale = 1f; // Ensure time is unpaused if coming back from win/game over
+
+        if (GameModeManager.SelectedMode == GameMode.Easy)
+            winScoreThreshold = 10;
+        else if (GameModeManager.SelectedMode == GameMode.Hard)
+            winScoreThreshold = 20;
     }
 
     void Update()
@@ -26,7 +33,14 @@ public class LogicScript : MonoBehaviour
         {
             missionTimer += Time.deltaTime;
 
-            if (missionTimer >= 30f)
+            if (missionTimer >= 60f)
+            {
+                win();
+            }
+        }
+        else if (!hasWon && (GameModeManager.SelectedMode == GameMode.Easy || GameModeManager.SelectedMode == GameMode.Hard))
+        {
+            if (playerScore >= winScoreThreshold)
             {
                 win();
             }
