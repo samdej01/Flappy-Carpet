@@ -4,13 +4,12 @@ public class DeadZoneScript : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        // Try to get CarpetScript directly (no tag check)
+        CarpetScript carpet = other.GetComponent<CarpetScript>();
+
+        if (carpet != null)
         {
-            CarpetScript carpet = other.GetComponent<CarpetScript>();
-            if (carpet != null)
-            {
-                carpet.ForceGameOver(); // Calls the same method as a collision
-            }
+            carpet.ForceGameOver(); // Trigger the same game over logic
         }
     }
 }
