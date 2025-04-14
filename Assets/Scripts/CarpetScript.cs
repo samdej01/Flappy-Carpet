@@ -23,7 +23,18 @@ public class CarpetScript : MonoBehaviour
             myRigidbody = GetComponent<Rigidbody2D>();
         }
 
-        logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+        if (logic == null)
+        {
+            GameObject logicObj = GameObject.FindGameObjectWithTag("Logic");
+            if (logicObj != null)
+            {
+                logic = logicObj.GetComponent<LogicScript>();
+            }
+            else
+            {
+                Debug.LogWarning("Logic object with tag 'Logic' not found!");
+            }
+        }
     }
 
     void Update()
@@ -37,32 +48,65 @@ public class CarpetScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("Carpet collided with: " + collision.gameObject.name);
+
         if (hasCollided) return;
+
+        TriggerGameOver();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Carpet triggered with: " + other.gameObject.name);
+
+        if (hasCollided) return;
+
+        TriggerGameOver();
+    }
+
+    private void TriggerGameOver()
+    {
         hasCollided = true;
         Alive = false;
 
-        backgroundMusic.Stop();
-        audioSource.PlayOneShot(collisionClip);
+        if (backgroundMusic != null) backgroundMusic.Stop();
+        if (audioSource != null && collisionClip != null)
+        {
+            audioSource.PlayOneShot(collisionClip);
+        }
+
         StartCoroutine(PlayGameOverAfterDelay());
     }
 
     IEnumerator PlayGameOverAfterDelay()
     {
-        yield return new WaitForSeconds(collisionClip.length);
-        audioSource.PlayOneShot(gameOverClip);
-        yield return new WaitForSeconds(gameOverClip.length * 0.8f);
-        logic.gameOver();
+        if (collisionClip != null)
+        {
+            yield return new WaitForSeconds(collisionClip.length);
+        }
+
+        if (audioSource != null && gameOverClip != null)
+        {
+            audioSource.PlayOneShot(gameOverClip);
+            yield return new WaitForSeconds(gameOverClip.length * 0.8f);
+        }
+
+        if (logic != null)
+        {
+            logic.gameOver();
+        }
+        else
+        {
+            Debug.LogWarning("Logic script not found when trying to trigger game over.");
+        }
     }
 
     public void ForceGameOver()
     {
         if (!hasCollided)
         {
-            hasCollided = true;
-            Alive = false;
-            backgroundMusic.Stop();
-            audioSource.PlayOneShot(collisionClip);
-            StartCoroutine(PlayGameOverAfterDelay());
+            Debug.Log("ForceGameOver called.");
+            TriggerGameOver();
         }
     }
 }

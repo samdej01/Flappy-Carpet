@@ -12,14 +12,19 @@ public class LogicScript : MonoBehaviour
     public GameObject winScreen;
     public int winScoreThreshold = 10;
 
-
     private float missionTimer = 0f;
     private bool hasWon = false;
+    private bool hasLost = false;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip winClip;
+    public AudioClip gameOverClip;
 
     void Start()
     {
         Debug.Log("Game Started in Mode: " + GameModeManager.SelectedMode);
-        Time.timeScale = 1f; // Ensure time is unpaused if coming back from win/game over
+        Time.timeScale = 1f;
 
         if (GameModeManager.SelectedMode == GameMode.Easy)
             winScoreThreshold = 10;
@@ -29,28 +34,27 @@ public class LogicScript : MonoBehaviour
 
     void Update()
     {
-        if (GameModeManager.SelectedMode == GameMode.Mission && !hasWon)
+        if (hasWon || hasLost) return;
+
+        if (GameModeManager.SelectedMode == GameMode.Mission)
         {
             missionTimer += Time.deltaTime;
 
-            if (missionTimer >= 60f)
+            if (missionTimer >= 20f)
             {
-                win();
+                WinGame();
             }
         }
-        else if (!hasWon && (GameModeManager.SelectedMode == GameMode.Easy || GameModeManager.SelectedMode == GameMode.Hard))
+        else if (playerScore >= winScoreThreshold)
         {
-            if (playerScore >= winScoreThreshold)
-            {
-                win();
-            }
+            WinGame();
         }
     }
 
     [ContextMenu("Increase Score")]
     public void addScore(int scoreToAdd)
     {
-        playerScore = playerScore + scoreToAdd;
+        playerScore += scoreToAdd;
         scoreText.text = playerScore.ToString();
     }
 
@@ -62,14 +66,37 @@ public class LogicScript : MonoBehaviour
 
     public void gameOver()
     {
+        if (hasLost || hasWon) return;
+
+        hasLost = true;
+        StartCoroutine(PlayGameOver());
+    }
+
+    IEnumerator PlayGameOver()
+    {
+        if (audioSource != null && gameOverClip != null)
+        {
+            audioSource.PlayOneShot(gameOverClip);
+            yield return new WaitForSeconds(gameOverClip.length);
+        }
+
+        Time.timeScale = 0f;
         gameOverScreen.SetActive(true);
     }
 
-    public void win()
+    public void WinGame()
     {
+        if (hasWon || hasLost) return;
+
         hasWon = true;
-        Time.timeScale = 0f; 
-        winScreen.SetActive(true); 
-        Debug.Log("Survived Mission Mode");
+
+        if (audioSource != null && winClip != null)
+        {
+            audioSource.PlayOneShot(winClip);
+        }
+
+        Time.timeScale = 0f;
+        winScreen.SetActive(true);
+        Debug.Log("🎉 Player Wins!");
     }
 }
