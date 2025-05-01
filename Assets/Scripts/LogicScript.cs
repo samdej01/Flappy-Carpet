@@ -97,6 +97,5 @@ public class LogicScript : MonoBehaviour
 
         Time.timeScale = 0f;
         winScreen.SetActive(true);
-        Debug.Log("🎉 Player Wins!");
     }
 }

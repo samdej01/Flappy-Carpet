@@ -41,28 +41,26 @@ public class CarpetScript : MonoBehaviour
     {
         if (Alive && Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("SPACE PRESSED");
             myRigidbody.linearVelocity = Vector2.up * flapStrength;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Carpet collided with: " + collision.gameObject.name);
-
         if (hasCollided) return;
 
         TriggerGameOver();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
+{
+    if (hasCollided) return;
+
+    if (other.CompareTag("Obstacle"))  // Make sure obstacle has this tag
     {
-        Debug.Log("Carpet triggered with: " + other.gameObject.name);
-
-        if (hasCollided) return;
-
         TriggerGameOver();
     }
+}
 
     private void TriggerGameOver()
     {
@@ -105,7 +103,6 @@ public class CarpetScript : MonoBehaviour
     {
         if (!hasCollided)
         {
-            Debug.Log("ForceGameOver called.");
             TriggerGameOver();
         }
     }

@@ -22,4 +22,5 @@ public class MiddleScript : MonoBehaviour
             logic.addScore(1);
         }
     }
+
 }
