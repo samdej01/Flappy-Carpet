@@ -9,11 +9,6 @@ public class CarpetScript : MonoBehaviour
     public LogicScript logic;
     public bool Alive = true;
 
-    public AudioSource backgroundMusic;
-    public AudioSource audioSource;
-    public AudioClip collisionClip;
-    public AudioClip gameOverClip;
-
     private bool hasCollided = false;
 
     void Start()
@@ -48,47 +43,37 @@ public class CarpetScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (hasCollided) return;
-
-        TriggerGameOver();
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            TriggerGameOver();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
-{
-    if (hasCollided) return;
-
-    if (other.CompareTag("Obstacle"))  // Make sure obstacle has this tag
     {
-        TriggerGameOver();
+        if (hasCollided) return;
+
+        if (other.CompareTag("Obstacle"))
+        {
+            TriggerGameOver();
+        }
     }
-}
 
     private void TriggerGameOver()
     {
         hasCollided = true;
         Alive = false;
 
-        if (backgroundMusic != null) backgroundMusic.Stop();
-        if (audioSource != null && collisionClip != null)
-        {
-            audioSource.PlayOneShot(collisionClip);
-        }
-
+        SoundManager.Instance.PlaySound(SoundManager.Instance.collisionClip);
         StartCoroutine(PlayGameOverAfterDelay());
     }
 
     IEnumerator PlayGameOverAfterDelay()
     {
-        if (collisionClip != null)
-        {
-            yield return new WaitForSeconds(collisionClip.length);
-        }
+        yield return new WaitForSeconds(0.5f);
+        SoundManager.Instance.PlaySound(SoundManager.Instance.gameOverClip);
 
-        if (audioSource != null && gameOverClip != null)
-        {
-            audioSource.PlayOneShot(gameOverClip);
-            yield return new WaitForSeconds(gameOverClip.length * 0.8f);
-        }
-
+        yield return new WaitForSeconds(1f); // Optional short wait before game ends
         if (logic != null)
         {
             logic.gameOver();
