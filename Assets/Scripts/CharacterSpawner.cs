@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CharacterSpawner : MonoBehaviour
 {
-    public GameObject[] characterPrefabs; // Jasmine = 0, Genie = 1
+    public GameObject[] characterPrefabs; // [0] = Jasmine, [1] = Genie
     public Transform spawnPoint;
 
     void Start()
@@ -16,14 +16,14 @@ public class CharacterSpawner : MonoBehaviour
             return;
         }
 
-        if (selected < characterPrefabs.Length)
+        if (selected >= 0 && selected < characterPrefabs.Length)
         {
-            GameObject spawned = Instantiate(characterPrefabs[selected], spawnPoint.position, Quaternion.identity);
-            Debug.Log("Spawned character: " + spawned.name);
+            GameObject character = Instantiate(characterPrefabs[selected], spawnPoint.position, Quaternion.identity);
+            Debug.Log("Spawned character: " + character.name);
         }
         else
         {
-            Debug.LogWarning("Selected character index out of range.");
+            Debug.LogWarning("Selected character index out of range: " + selected);
         }
     }
 }

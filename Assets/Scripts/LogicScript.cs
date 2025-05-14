@@ -21,6 +21,12 @@ public class LogicScript : MonoBehaviour
     public AudioClip winClip;
     public AudioClip gameOverClip;
 
+    [Header("Cup Progress")]
+    public Image cupHolderImage;
+    public Sprite silverCupSprite;
+    public Sprite goldCupSprite;
+
+
     void Start()
     {
         Debug.Log("Game Started in Mode: " + GameModeManager.SelectedMode);
@@ -56,6 +62,19 @@ public class LogicScript : MonoBehaviour
     {
         playerScore += scoreToAdd;
         scoreText.text = playerScore.ToString();
+
+        // Show silver cup at 10
+        if (playerScore == 10 && cupHolderImage != null)
+        {
+            cupHolderImage.sprite = silverCupSprite;
+            cupHolderImage.color = Color.white; // Make sure it's visible
+        }
+
+        // Upgrade to gold cup at 20
+        if (playerScore == 20 && cupHolderImage != null)
+        {
+            cupHolderImage.sprite = goldCupSprite;
+        }
     }
 
     public void GoToMenu()
@@ -98,4 +117,5 @@ public class LogicScript : MonoBehaviour
         Time.timeScale = 0f;
         winScreen.SetActive(true);
     }
+
 }
