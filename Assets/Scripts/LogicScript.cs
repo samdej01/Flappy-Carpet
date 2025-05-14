@@ -64,14 +64,14 @@ public class LogicScript : MonoBehaviour
         scoreText.text = playerScore.ToString();
 
         // Show silver cup at 10
-        if (playerScore == 10 && cupHolderImage != null)
+        if (playerScore == 2 && cupHolderImage != null)
         {
             cupHolderImage.sprite = silverCupSprite;
             cupHolderImage.color = Color.white; // Make sure it's visible
         }
 
         // Upgrade to gold cup at 20
-        if (playerScore == 20 && cupHolderImage != null)
+        if (playerScore == 3 && cupHolderImage != null)
         {
             cupHolderImage.sprite = goldCupSprite;
         }
