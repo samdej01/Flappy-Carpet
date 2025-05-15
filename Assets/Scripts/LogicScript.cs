@@ -9,8 +9,7 @@ public class LogicScript : MonoBehaviour
     public int playerScore;
     public Text scoreText;
     public GameObject gameOverScreen;
-    public GameObject winScreen;
-    public int winScoreThreshold = 10;
+    public int winScoreThreshold = 5;
 
     private float missionTimer = 0f;
     private bool hasWon = false;
@@ -26,6 +25,9 @@ public class LogicScript : MonoBehaviour
     public Sprite silverCupSprite;
     public Sprite goldCupSprite;
 
+    [Header("Scene Transition")]
+    public string sceneToLoadAfterTwoObstacles = "UnlockedScene"; // Set this in the Inspector
+    public string currentSceneMustBe = "GameScene"; // Only transition if this is the current scene
 
     void Start()
     {
@@ -36,6 +38,8 @@ public class LogicScript : MonoBehaviour
             winScoreThreshold = 10;
         else if (GameModeManager.SelectedMode == GameMode.Hard)
             winScoreThreshold = 20;
+
+        Debug.Log("Win Score Threshold: " + winScoreThreshold);
     }
 
     void Update()
@@ -51,29 +55,42 @@ public class LogicScript : MonoBehaviour
                 WinGame();
             }
         }
-        else if (playerScore >= winScoreThreshold)
+
+        // Fallback win check for Easy & Hard modes
+        if (playerScore >= winScoreThreshold && !hasWon)
         {
             WinGame();
         }
     }
 
-    [ContextMenu("Increase Score")]
     public void addScore(int scoreToAdd)
     {
         playerScore += scoreToAdd;
         scoreText.text = playerScore.ToString();
+        Debug.Log("Score increased. Current score: " + playerScore);
 
-        // Show silver cup at 10
+        // Only transition if current scene is the first level
+        if (playerScore == 5 && SceneManager.GetActiveScene().name == currentSceneMustBe)
+        {
+            Debug.Log("Passed 2 obstacles in first level – loading next scene.");
+            SceneManager.LoadScene(sceneToLoadAfterTwoObstacles);
+            return;
+        }
+
         if (playerScore == 2 && cupHolderImage != null)
         {
             cupHolderImage.sprite = silverCupSprite;
-            cupHolderImage.color = Color.white; // Make sure it's visible
+            cupHolderImage.color = Color.white;
         }
 
-        // Upgrade to gold cup at 20
         if (playerScore == 3 && cupHolderImage != null)
         {
             cupHolderImage.sprite = goldCupSprite;
+        }
+
+        if (playerScore >= winScoreThreshold && !hasWon)
+        {
+            WinGame();
         }
     }
 
@@ -108,14 +125,14 @@ public class LogicScript : MonoBehaviour
         if (hasWon || hasLost) return;
 
         hasWon = true;
+        Debug.Log("WinGame called – level complete!");
 
         if (audioSource != null && winClip != null)
         {
             audioSource.PlayOneShot(winClip);
         }
 
-        Time.timeScale = 0f;
-        winScreen.SetActive(true);
+        // You can optionally load a scene here after win condition
+        // SceneManager.LoadScene("WinScene");
     }
-
 }
