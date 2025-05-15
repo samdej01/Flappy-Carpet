@@ -14,6 +14,15 @@ public class LampManager : MonoBehaviour
         totalLampsCollected = PlayerPrefs.GetInt("TotalLamps", 0);
     }
 
+    private void Update()
+    {
+        // Press R key to reset lamp count
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetLampCount();
+        }
+    }
+
     public void CollectLamp(GameObject lamp)
     {
         Destroy(lamp);
@@ -21,5 +30,13 @@ public class LampManager : MonoBehaviour
         PlayerPrefs.SetInt("TotalLamps", totalLampsCollected);
         PlayerPrefs.Save();
         Debug.Log("Lamp collected! Total: " + totalLampsCollected);
+    }
+
+    public void ResetLampCount()
+    {
+        totalLampsCollected = 0;
+        PlayerPrefs.SetInt("TotalLamps", 0);
+        PlayerPrefs.Save();
+        Debug.Log("Lamp count reset!");
     }
 }
