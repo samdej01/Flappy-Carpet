@@ -1,4 +1,4 @@
-# 🧞‍♂️🕌 Flappy Carpet
+# 🧞‍♂️ Flappy Carpet 🕌
 
 **Flappy Carpet** is a Unity game similar to *Flappy Bird* with an **Aladdin-inspired theme** where the player controls a flying magic carpet through obstacles.
 
@@ -17,7 +17,7 @@ This project demonstrates game development fundamentals using **Unity**, includi
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - 🎮 **Game Engine:** Unity
 - 💻 **Programming Language:** C#
